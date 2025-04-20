@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Virtual environment
+venv/
+
+# Django stuff
+*.sqlite3
+db.sqlite
+db.sqlite3-journal
+
+# Static and media files (optional – comment out if needed)
+staticfiles/
+media/
+
+# VS Code
+.vscode/
+
+# IDEs and editors
+*.swp
+.idea/
+
+# Environment variables
+.env
+.env.*
+
+# Migrations (optional – keep if you want to version control them)
+*/migrations/__pycache__/
+*.mo
+
