@@ -1,0 +1,77 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Store{% endblock %}</title>
+
+    <!-- Bootstrap CSS (Flatly Theme) -->
+    <link rel="stylesheet" href="https://bootswatch.com/5/flatly/bootstrap.min.css">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    {% block extra_templates %}{% endblock extra_templates %}
+</head>
+
+<body>
+    <!-- Navbar: Se muestra solo si el usuario está autenticado -->
+    {% if user.is_authenticated %}
+        {% include 'navbar.html' %}
+    {% endif %}
+
+    <!-- Main Container -->
+    <div class="container mt-4">
+        
+        <!-- Flash Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} text-center {% if message.tags == 'success' %}text-white{% elif message.tags == 'warning' %}text-dark{% else %}text-white{% endif %}" id="message-timer">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Main Content Block -->
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let idleTime = 0;
+    
+        function resetIdleTimer() {
+            idleTime = 0;
+        }
+    
+        // Incrementa el contador de inactividad cada minuto
+        setInterval(function () {
+            idleTime += 1;
+            if (idleTime > 5) {  // 5 minutos
+                window.location.href = "{% url 'home' %}";
+            }
+        }, 60000); // 1 minuto
+    
+        // Reinicia el temporizador en cada interacción del usuario
+        window.onload = resetIdleTimer;
+        window.onmousemove = resetIdleTimer;
+        window.onkeypress = resetIdleTimer;
+        window.onclick = resetIdleTimer;
+        window.onscroll = resetIdleTimer;
+    </script>
+    
+    <!-- Additional Scripts -->
+    {% block extra_scripts %}{% endblock extra_scripts %}
+</body>
+</html>
