@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="container bg-light shadow-md p-5 form-layout" style="max-width: 500px; border-radius: 10px;">
+        <h3 class="text-center fw-bold">INGRESAR</h3>
+        <hr>
+        <!-- Se elimina el bloque que mostraba mensajes nuevamente -->
+
+        <form method="POST" autocomplete="off">
+            {% csrf_token %}
+            <!-- Campo Username -->
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="background-color: #e9ecef; width: 150px;">
+                    <i class="fa-solid fa-user me-2"></i> Usuario
+                </span>
+                <input type="text" name="{{ form.username.name }}" class="form-control" required>
+            </div>
+
+            <!-- Campo Password -->
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="background-color: #e9ecef; width: 150px;">
+                    <i class="fa-solid fa-lock me-2"></i> Contraseña
+                </span>
+                <input type="password" name="{{ form.password.name }}" class="form-control" required>
+            </div>
+
+            <br>
+            <!-- Botón de Iniciar Sesión en color naranja -->
+            <button type="submit" class="btn w-100 btn-block p-2" style="background-color: #e6610f; color: white; border: none;">
+                <i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión
+            </button>
+        </form>
+        <br>
+    </div>
+    <br>
+
+{% endblock content %}
