@@ -2,38 +2,89 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block content %}
-    <div class="container bg-light shadow-md p-5 form-layout" style="max-width: 500px; border-radius: 10px;">
-        <h3 class="text-center fw-bold">INGRESAR</h3>
-        <hr>
-        <!-- Se elimina el bloque que mostraba mensajes nuevamente -->
+{% block extra_templates %}
+<style>
+.login-section {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, #00c6dd, #02b7f0, #8e02fb);
+}
 
+.login-card {
+    background-color: white;
+    padding: 3rem;
+    border-radius: 16px;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.login-card h3 {
+    font-weight: 700;
+    color: #333;
+}
+
+.login-card .input-group-text {
+    background-color: #f0f0f0;
+    width: 150px;
+    font-weight: 500;
+    color: #444;
+}
+
+.login-card .form-control {
+    border-radius: 8px;
+}
+
+.login-card .btn-orange {
+    background: linear-gradient(to right, #00c6dd, #8e02fb);
+    color: white;
+    border: none;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.login-card .btn-orange:hover {
+    opacity: 0.9;
+}
+
+
+.login-card .btn-orange:hover {
+    background-color: #cf540c;
+}
+</style>
+{% endblock extra_templates %}
+
+{% block content %}
+<section class="login-section">
+    <div class="login-card">
+        <h3 class="text-center mb-4">Iniciar sesión</h3>
         <form method="POST" autocomplete="off">
             {% csrf_token %}
+
             <!-- Campo Username -->
             <div class="input-group mb-3">
-                <span class="input-group-text" style="background-color: #e9ecef; width: 150px;">
+                <span class="input-group-text">
                     <i class="fa-solid fa-user me-2"></i> Usuario
                 </span>
                 <input type="text" name="{{ form.username.name }}" class="form-control" required>
             </div>
 
             <!-- Campo Password -->
-            <div class="input-group mb-3">
-                <span class="input-group-text" style="background-color: #e9ecef; width: 150px;">
+            <div class="input-group mb-4">
+                <span class="input-group-text">
                     <i class="fa-solid fa-lock me-2"></i> Contraseña
                 </span>
                 <input type="password" name="{{ form.password.name }}" class="form-control" required>
             </div>
 
-            <br>
-            <!-- Botón de Iniciar Sesión en color naranja -->
-            <button type="submit" class="btn w-100 btn-block p-2" style="background-color: #e6610f; color: white; border: none;">
+            <button type="submit" class="btn btn-orange w-100 p-2">
                 <i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión
             </button>
         </form>
-        <br>
     </div>
-    <br>
-
+</section>
 {% endblock content %}

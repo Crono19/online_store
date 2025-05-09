@@ -1,32 +1,80 @@
 {% extends 'base.html' %}
+
+{% block extra_templates %}
+<style>
+.about-section h2,
+.about-section h3 {
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.about-section p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #555;
+}
+
+.about-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.about-section ul li {
+    margin-bottom: 0.75rem;
+    position: relative;
+    padding-left: 1.8rem;
+}
+
+.about-section ul li::before {
+    content: "✔";
+    position: absolute;
+    left: 0;
+    color: #00c6dd;
+    font-weight: bold;
+}
+
+.about-section a {
+    color: #02b7f0;
+    text-decoration: none;
+}
+
+.about-section a:hover {
+    text-decoration: underline;
+}
+</style>
+{% endblock extra_templates %}
+
 {% block content %}
 
-<!-- Header-->
-<header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">About Us</h1>
-            <p class="lead fw-normal text-white-50 mb-0">Learn more about our online store</p>
-        </div>
+<!-- Header -->
+<header class="hero-section text-white py-5" style="background: linear-gradient(to right, #00c6dd, #02b7f0, #8e02fb);">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">Conocé Kaiden</h1>
+        <p class="lead">Pasión por crear experiencias de compra memorables</p>
     </div>
 </header>
-<!-- Section-->
-<section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5">
-            <div class="col-lg-12">
-                <h2>Welcome to Our Online Store</h2>
-                <p>We are dedicated to providing you with the best shopping experience possible. Our mission is to offer high-quality products at competitive prices, along with exceptional customer service.</p>
-                <h3>Our Story</h3>
-                <p>Founded in 2023, we started as a small team of passionate individuals who wanted to make online shopping easier and more enjoyable for everyone. Over the years, we have grown into a trusted name in the industry, serving customers from all over the world.</p>
-                <h3>Our Values</h3>
+
+<!-- About Content -->
+<section class="py-5 about-section">
+    <div class="container px-4 px-lg-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-9">
+                <h2>Bienvenido a Kaiden</h2>
+                <p>Somos una tienda online comprometida con ofrecerte lo mejor en productos, atención al cliente y experiencia digital. Nuestra misión es simple: hacer que comprar en línea sea tan placentero como recibir tu pedido.</p>
+
+                <h3>Nuestra Historia</h3>
+                <p>Kaiden nació en 2023 como un proyecto de emprendedores apasionados por la innovación. Lo que comenzó como una tienda modesta pronto creció gracias al apoyo de una comunidad que valora la calidad, el diseño y la confianza.</p>
+
+                <h3>Lo que Nos Mueve</h3>
                 <ul>
-                    <li><strong>Quality:</strong> We believe in offering only the best products to our customers.</li>
-                    <li><strong>Customer Satisfaction:</strong> Your happiness is our top priority.</li>
-                    <li><strong>Innovation:</strong> We are constantly looking for ways to improve and enhance your shopping experience.</li>
+                    <li><strong>Calidad:</strong> Cada producto en nuestra tienda ha sido cuidadosamente seleccionado.</li>
+                    <li><strong>Tu Satisfacción:</strong> Nos esforzamos para que cada compra te deje una sonrisa.</li>
+                    <li><strong>Innovación:</strong> No dejamos de aprender, mejorar y evolucionar contigo.</li>
                 </ul>
-                <h3>Contact Us</h3>
-                <p>If you have any questions or feedback, feel free to reach out to us at <a href="mailto:informacion@kaiden.com.gt">informacion@kaiden.com.gt</a>. We look forward to hearing from you!</p>
+
+                <h3>¿Querés Contactarnos?</h3>
+                <p>¿Tenés dudas, sugerencias o solo querés saludarnos? Escribinos a <a href="mailto:informacion@kaiden.com.gt">informacion@kaiden.com.gt</a>. ¡Nos encantará escucharte!</p>
             </div>
         </div>
     </div>

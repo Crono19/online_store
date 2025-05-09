@@ -1,3 +1,76 @@
-<footer class="py-5 bg-dark">
-    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Kaiden 2025</p></div>
+{% block extra_templates %}
+<style>
+/* Modern navbar */
+.navbar {
+    background: linear-gradient(to right, #00c6dd, #02b7f0, #8e02fb);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .nav-link,
+.navbar .navbar-brand {
+    color: white !important;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: #fffacd !important; /* soft yellow hover */
+    text-decoration: underline;
+}
+
+.navbar .dropdown-menu {
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.navbar .dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+/* Stylish footer */
+footer.bg-dark {
+    background: linear-gradient(to right, #00c6dd, #02b7f0, #8e02fb);
+    color: white;
+    padding: 2rem 0;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.2);
+}
+
+/* Modern page container */
+.page-box {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+
+/* Global improvements */
+body {
+    background-color: #f5f7fa;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+}
+
+.btn-outline-dark {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-dark:hover {
+    background-color: #00c6dd;
+    color: white;
+    border-color: #00c6dd;
+}
+</style>
+{% endblock extra_templates %}
+
+
+<footer class="mt-4 py-4 text-center text-white" style="background: linear-gradient(to right, #00c6dd, #02b7f0, #8e02fb);">
+    <p class="mb-0 fw-light">Copyright &copy; Kaiden 2025</p>
 </footer>
+

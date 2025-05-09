@@ -1,35 +1,120 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container px-4 px-lg-5">
-        <a class="navbar-brand" href="#!">Start Bootstrap</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+{% load static %}
 
-                {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
-                {% else %}
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'login' %}">Login</a></li>
-                {% endif %}
+{% block extra_templates %}
+<style>
+/* Modern navbar */
+.navbar {
+    background: linear-gradient(to right, #00c6dd, #02b7f0, #8e02fb);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">All Products</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                        <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <form class="d-flex">
-                <button class="btn btn-outline-dark" type="submit">
-                    <i class="bi-cart-fill me-1"></i>
-                    Cart
-                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                </button>
-            </form>
-        </div>
-    </div>
+.navbar .nav-link,
+.navbar .navbar-brand {
+    color: white !important;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: #fffacd !important; /* soft yellow hover */
+    text-decoration: underline;
+}
+
+.navbar .dropdown-menu {
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.navbar .dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+/* Stylish footer */
+footer.bg-dark {
+    background: linear-gradient(to right, #00c6dd, #02b7f0, #8e02fb);
+    color: white;
+    padding: 2rem 0;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.2);
+}
+
+/* Modern page container */
+.page-box {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+
+/* Global improvements */
+
+
+.btn-outline-dark {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-dark:hover {
+    background-color: #00c6dd;
+    color: white;
+    border-color: #00c6dd;
+}
+</style>
+{% endblock extra_templates %}
+
+<nav class="navbar navbar-expand-lg" style="background: linear-gradient(to right, #00c6dd, #02b7f0, #8e02fb);">
+  <div class="container-fluid px-4 px-lg-5">
+    <a class="navbar-brand" href="{% url 'home' %}" style="background: #555; padding: 4px 10px; border-radius: 10px;">
+        <img src="{% static 'assets/logo.png' %}" alt="Kaiden Logo" style="height: 30px;">
+    </a>    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+              <li class="nav-item"><a class="nav-link text-white" href="{% url 'home' %}">Catálgo</a></li>
+              <li class="nav-item"><a class="nav-link text-white" href="{% url 'about' %}">Sobre nosotros</a></li>
+
+              {% if user.is_authenticated %}
+                  <li class="nav-item"><a class="nav-link text-white" href="{% url 'logout' %}">Cerrar sesión</a></li>
+              {% else %}
+                  <li class="nav-item"><a class="nav-link text-white" href="{% url 'login' %}">Iniciar sesión</a></li>
+              {% endif %}
+
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle text-white" id="navbarDropdown" href="#" role="button"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                      Categorías
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{% url 'home' %}">Todos los productos</a></li>
+                      <li><hr class="dropdown-divider" /></li>
+                      {% for cat in categories %}
+                          <li>
+                              <a class="dropdown-item" href="{% url 'category' cat.name|slugify %}">
+                                  {{ cat.name }}
+                              </a>
+                          </li>
+                      {% empty %}
+                          <li class="dropdown-item text-muted">Sin categorías</li>
+                      {% endfor %}
+                  </ul>
+              </li>
+          </ul>
+          <form class="d-flex">
+              <a href="{% url 'summary' %}" class="btn btn-light fw-semibold rounded-pill px-3">
+                  <i class="bi-cart-fill me-1"></i>
+                  Carrito
+                  <span class="badge bg-dark text-white ms-1 rounded-pill" id="cart_quantity">{{ cart|length }}</span>
+              </a>
+          </form>
+      </div>
+  </div>
 </nav>

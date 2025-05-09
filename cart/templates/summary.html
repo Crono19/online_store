@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block extra_templates %}
+<style>
+.cart-product {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.cart-product img {
+    border-radius: 12px;
+    height: 120px;
+    object-fit: cover;
+}
+
+.cart-product h5 {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.cart-product p {
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.cart-product .form-select {
+    width: 100px;
+    border-radius: 8px;
+}
+
+.cart-product .btn-outline-danger {
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+.summary-card {
+    border-radius: 16px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+}
+
+.summary-card .card-header {
+    background: #f8f9fa;
+    font-weight: 600;
+}
+
+.summary-card ul {
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: #02b7f0;
+    border-color: #02b7f0;
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+.btn-primary:hover {
+    background: #00c6dd;
+    border-color: #00c6dd;
+}
+</style>
+{% endblock extra_templates %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    {% if products %}
+    <div class="row d-flex justify-content-center">
+      <!-- Cart Items -->
+      <div class="col-md-8">
+        <div class="card p-4 border-0 shadow-sm rounded-4">
+          <h4 class="mb-4">Carrito ({{ products|length }} items)</h4>
+          {% for item in products %}
+          <div class="row align-items-center cart-product">
+            <div class="col-md-3 col-5">
+              <img src="{{ item.product.image.url }}" class="img-fluid" alt="{{ item.product.name }}">
+            </div>
+            <div class="col-md-5 col-7">
+              <h5>{{ item.product.name }}</h5>
+              <p class="small">{{ item.product.description|truncatewords:12 }}</p>
+              <p><strong>Q{{ item.total_price|floatformat:2 }}</strong></p>
+            </div>
+            <div class="col-md-4">
+              <form method="post" action="{% url 'update' %}">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <div class="mb-2 d-flex align-items-center gap-2">
+                  <label class="me-2 mb-0 small">Cantidad:</label>
+                  <select class="form-select form-select-sm" name="quantity" onchange="this.form.submit()">
+                    {% for i in quantity_range %}
+                      <option value="{{ i }}" {% if i == item.quantity %}selected{% endif %}>{{ i }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </form>
+              <form method="post" action="{% url 'delete' %}">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <button type="submit" class="btn btn-outline-danger btn-sm mt-1">Eliminar</button>
+              </form>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="col-md-4">
+        <div class="card summary-card border-0">
+          <div class="card-header py-3">
+            <h5 class="mb-0">Resumen</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush mb-3">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Subtotal
+                <span>Q{{ total|floatformat:2 }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Envío
+                <span>Gratis</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
+                Total
+                <span>Q{{ total|floatformat:2 }}</span>
+              </li>
+            </ul>
+            <a href="#" class="btn btn-primary w-100">Ir al checkout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="text-center mt-5">
+      <h3 class="text-muted">Tu carrito está vacío</h3>
+      <a href="{% url 'home' %}" class="btn btn-outline-primary mt-3">Seguir comprando</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

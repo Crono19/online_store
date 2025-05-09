@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .forms import (LoginForm)
@@ -34,3 +34,15 @@ def logout(request):
     auth_logout(request)
     messages.success(request, ("Sesión cerrada"))
     return redirect('home')
+
+def product(request, pk):
+    product = Product.objects.get(pk=pk)
+    quantity_range = range(1, 11)
+
+    return render(request, 'product.html', {'product': product, "quantity_range": quantity_range})
+
+def category(request, name):
+    name = name.replace("-", " ")
+    category = get_object_or_404(Category, name__iexact=name, deleted=False)
+    products = Product.objects.filter(category=category)
+    return render(request, 'category.html', {'category': category, 'products': products})
