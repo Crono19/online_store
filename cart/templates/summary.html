@@ -59,6 +59,12 @@
     background: #00c6dd;
     border-color: #00c6dd;
 }
+
+.strike {
+    color: #aaa;
+    font-size: 0.9rem;
+    text-decoration: line-through;
+}
 </style>
 {% endblock extra_templates %}
 
@@ -79,7 +85,12 @@
             <div class="col-md-5 col-7">
               <h5>{{ item.product.name }}</h5>
               <p class="small">{{ item.product.description|truncatewords:12 }}</p>
-              <p><strong>Q{{ item.total_price|floatformat:2 }}</strong></p>
+              {% if item.product.is_sale %}
+                <span class="strike"><p>Q{{ item.total_price|floatformat:2 }}</p></span>
+                <p><strong>Q{{ item.total_sale_price|floatformat:2 }}</strong></p>
+              {% else %}
+                <p><strong>Q{{ item.total_price|floatformat:2 }}</strong></p>
+              {% endif %}
             </div>
             <div class="col-md-4">
               <form method="post" action="{% url 'update' %}">

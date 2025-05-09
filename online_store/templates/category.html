@@ -1,69 +1,138 @@
 {% extends 'base.html' %}
+
+{% block extra_templates %}
+<style>
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(to right, #00c6dd, #02b7f0, #8e02fb);
+    color: white;
+    padding: 5rem 0;
+    position: relative;
+    text-align: center;
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero-section p {
+    font-size: 1.25rem;
+    color: #e3e3e3;
+}
+
+/* Product Card */
+.card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.card-img-top {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.card-footer {
+    background: none;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.5em 0.75em;
+    border-radius: 8px;
+}
+
+/* Button */
+.btn-outline-dark {
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-outline-dark:hover {
+    background-color: #02b7f0;
+    color: white;
+    border-color: #02b7f0;
+}
+
+/* Price Styling */
+.price {
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.strike {
+    color: #aaa;
+    font-size: 0.9rem;
+    text-decoration: line-through;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 
-<!-- Header-->
-<header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Shop in style</h1>
-            <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
-        </div>
+<!-- Header -->
+<header class="hero-section">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Descubrí lo mejor en un solo lugar</h1>
+        <p class="lead">Tu tienda digital favorita, con estilo y velocidad.</p>
     </div>
 </header>
-<!-- Section-->
+
+<!-- Product Section -->
 <section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5">
+    <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             {% for product in products %}
-                {% if product.is_sale %}
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Sale badge -->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
-                            <!-- Product image -->
-                            <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" />
-                            <!-- Product details -->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name -->
-                                    <h5 class="fw-bolder">{{ product.name }}</h5>
-                                    <!-- Sale star -->
-                                        <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div> &nbsp;&nbsp;Sale!&nbsp;&nbsp;<div class="bi-star-fill"></div>
-                                    </div>
-                                    <!-- Product price -->
-                                    <strike class="text-muted">Q{{ product.price }}</strike>
-                                    <br>
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        {% if product.is_sale %}
+                        <div class="badge bg-dark text-white position-absolute" style="top: 0.75rem; right: 0.75rem">SALE</div>
+                        {% endif %}
+
+                        <!-- Product image -->
+                        <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" />
+
+                        <!-- Product details -->
+                        <div class="card-body text-center">
+                            <h5 class="fw-bold mb-2">{{ product.name }}</h5>
+
+                            {% if product.is_sale %}
+                                <div class="text-warning mb-2">
+                                    <i class="bi-star-fill"></i> Oferta Especial <i class="bi-star-fill"></i>
+                                </div>
+                                <div class="price">
+                                    <span class="strike">Q{{ product.price }}</span><br>
                                     Q{{ product.sale_price }}
                                 </div>
-                            </div>
-                            <!-- Product actions -->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{ url 'product' product.id }">View options</a></div>
-                            </div>
+                            {% else %}
+                                <div class="price">Q{{ product.price }}</div>
+                            {% endif %}
                         </div>
-                    </div>
-                {% else %}
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Product image -->
-                            <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" />
-                            <!-- Product details -->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name -->
-                                    <h5 class="fw-bolder">{{ product.name }}</h5>
-                                    <!-- Product price -->
-                                    Q{{ product.price }}
-                                </div>
-                            </div>
-                            <!-- Product actions -->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{ url 'product' product.id }">View options</a></div>
-                            </div>
+
+                        <!-- Product actions -->
+                        <div class="card-footer text-center border-top-0 bg-transparent">
+                            <a class="btn btn-outline-dark mt-auto" href="{% url 'product' product.id %}">Ver opciones</a>
                         </div>
+                        <br>
                     </div>
-                {% endif %}
+                </div>
             {% endfor %}
         </div>
     </div>

@@ -24,6 +24,8 @@ class Cart():
                 'name': product.name,
                 'price': str(product.price),
                 'quantity': int(product_quantity),
+                'is_sale': product.is_sale,
+                'sale_price': str(product.sale_price) if product.is_sale else None,
             }
 
         self.session.modified = True
@@ -38,7 +40,9 @@ class Cart():
             product_list.append({
                 'product': product,
                 'quantity': item['quantity'],
-                'total_price': float(item['price']) * item['quantity']
+                'total_price': float(item['price']) * item['quantity'],
+                'is_sale': item['is_sale'],
+                'total_sale_price': float(item['sale_price']) * item['quantity'] if item['is_sale'] else None,
             })
 
         return product_list

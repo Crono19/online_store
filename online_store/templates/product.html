@@ -101,7 +101,7 @@ select.form-select {
 
                 <div class="d-flex gap-2">
                     <button type="button" value="{{ product.id }}" class="btn btn-primary" id="add-cart">Añadir al carrito</button>
-                    <a href="{% url 'home' %}" class="btn btn-secondary">Regresar</a>
+                    <a href="{{ previous_page }}" class="btn btn-secondary">Regresar</a>
                 </div>
             </div>
         </div>
