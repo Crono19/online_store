@@ -1,8 +1,10 @@
 from online_store.models import Product
+from .models import PersistentCart, PersistentCartItem
 
 class Cart():
     def __init__(self, request):
         self.session = request.session
+        self.request = request
 
         # Check if the session has a cart
         cart = self.session.get("session_key")
@@ -29,6 +31,7 @@ class Cart():
             }
 
         self.session.modified = True
+        self._save_to_db()
 
     def view_cart(self):
         product_ids = self.cart.keys()
@@ -56,7 +59,22 @@ class Cart():
         if product_id in self.cart:
             del self.cart[product_id]
             self.session.modified = True
+            self._save_to_db()
 
 
     def __len__(self):
         return len(self.cart)
+
+    def _save_to_db(self):
+        if hasattr(self.request, 'user') and self.request.user.is_authenticated:
+            cart_obj, _ = PersistentCart.objects.get_or_create(user=self.request.user)
+            cart_obj.items.all().delete()  # Clear previous
+
+            for pid, data in self.cart.items():
+                product = Product.objects.filter(id=pid).first()
+                if product:
+                    PersistentCartItem.objects.create(
+                        cart=cart_obj,
+                        product=product,
+                        quantity=data['quantity']
+                    )

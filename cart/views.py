@@ -65,4 +65,3 @@ def delete(request):
         pass
 
     return redirect('summary')
-
