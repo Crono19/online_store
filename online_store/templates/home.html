@@ -83,6 +83,27 @@
     text-decoration: line-through;
 }
 </style>
+
+<style>
+    /* Search Bar */
+    #searchInput {
+        width: 100%;
+        max-width: 400px;
+        margin: 2rem auto;
+        padding: 0.75rem 1.2rem;
+        font-size: 1rem;
+        border: 2px solid #00c6dd;
+        border-radius: 30px;
+        outline: none;
+        transition: 0.3s ease-in-out;
+        box-shadow: 0 4px 12px rgba(0, 198, 221, 0.15);
+    }
+    
+    #searchInput:focus {
+        border-color: #8e02fb;
+        box-shadow: 0 4px 20px rgba(142, 2, 251, 0.3);
+    }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -97,45 +118,35 @@
 
 <!-- Product Section -->
 <section class="py-5">
-    <div class="container px-4 px-lg-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            {% for product in products %}
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        {% if product.is_sale %}
-                        <div class="badge bg-dark text-white position-absolute" style="top: 0.75rem; right: 0.75rem">SALE</div>
-                        {% endif %}
+    <div class="container text-center">
+        <!-- Search bar -->
+        <input id="searchInput" class="form-control" type="search" placeholder="Buscar productos..." aria-label="Buscar">
+    </div>
 
-                        <!-- Product image -->
-                        <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}" />
-
-                        <!-- Product details -->
-                        <div class="card-body text-center">
-                            <h5 class="fw-bold mb-2">{{ product.name }}</h5>
-
-                            {% if product.is_sale %}
-                                <div class="text-warning mb-2">
-                                    <i class="bi-star-fill"></i> Oferta Especial <i class="bi-star-fill"></i>
-                                </div>
-                                <div class="price">
-                                    <span class="strike">Q{{ product.price }}</span><br>
-                                    Q{{ product.sale_price }}
-                                </div>
-                            {% else %}
-                                <div class="price">Q{{ product.price }}</div>
-                            {% endif %}
-                        </div>
-
-                        <!-- Product actions -->
-                        <div class="card-footer text-center border-top-0 bg-transparent">
-                            <a class="btn btn-outline-dark mt-auto" href="{% url 'product' product.id %}">Ver opciones</a>
-                        </div>
-                        <br>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+    <div class="container mt-4" id="product-list">
+        {% include 'partials/_product_list.html' with products=products %}
     </div>
 </section>
+{% endblock %}
 
+{% block extra_scripts %}
+    <script>
+        const input = document.getElementById("searchInput");
+        let timeout = null;
+
+        input.addEventListener("input", function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            const query = input.value;
+            fetch(`/ajax/search/?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                const productContainer = document.querySelector("#product-list");
+                if (productContainer) {
+                productContainer.innerHTML = data.html;
+                }
+            });
+        }, 300); // debounce: 300ms
+        });
+    </script>
 {% endblock %}

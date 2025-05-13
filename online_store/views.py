@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .forms import (LoginForm)
 from .models import Product, Category
@@ -70,3 +72,21 @@ def category(request, name):
     category = get_object_or_404(Category, name__iexact=name, deleted=False)
     products = Product.objects.filter(category=category)
     return render(request, 'category.html', {'category': category, 'products': products})
+
+def search_products(request):
+    query = request.GET.get('q')
+    products = Product.objects.filter(name__icontains=query) if query else []
+    return render(request, 'search_results.html', {'products': products, 'query': query})
+
+def ajax_search(request):
+    query = request.GET.get('q', '')
+    products = Product.objects.filter(name__icontains=query) if query else Product.objects.all()
+    html = render_to_string('partials/_product_list.html', {'products': products})
+    return JsonResponse({'html': html})
+
+def ajax_search_category(request, name):
+    query = request.GET.get('q', '')
+    category = get_object_or_404(Category, name__iexact=name, deleted=False)
+    products = Product.objects.filter(name__icontains=query, category=category)[:10] if query else Product.objects.filter(category=category)
+    html = render_to_string('partials/_product_list_category.html', {'products': products})
+    return JsonResponse({'html': html})
