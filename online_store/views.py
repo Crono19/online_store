@@ -78,7 +78,7 @@ def logout(request):
     if request.user.is_authenticated:
         cart_data = request.session.get("session_key", {}).copy()
 
-        # Guardar carrito actual en la base de datos antes de cerrar sesión
+        # Guardar el carrito actual en base de datos
         cart_obj, _ = PersistentCart.objects.get_or_create(user=request.user)
         cart_obj.items.all().delete()
 
@@ -91,11 +91,11 @@ def logout(request):
                     quantity=data['quantity']
                 )
 
-    # Cierre de sesión
+    # Cerrar sesión
     auth_logout(request)
 
-    # Mantener el carrito en sesión (por si es un usuario anónimo que regresa)
-    request.session["session_key"] = cart_data if 'cart_data' in locals() else {}
+    if "session_key" in request.session:
+        del request.session["session_key"]
     request.session.modified = True
 
     messages.success(request, "Sesión cerrada")
