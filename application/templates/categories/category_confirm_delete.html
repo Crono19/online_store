@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Confirm Delete</h1>
+  <p>¿Deseas eliminar el registro "{{ object }}"?</p>
+  <form method="post">{% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a href="{% url 'category_list' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="text-center my-4">
+    <h1 class="display-4 fw-bold text-primary">Gestión de Categorías</h1>
+    <p class="lead text-muted">Administra las categorías de tus productos fácilmente.</p>
+  </div>
+
+  <!-- Crear y buscar -->
+  <div class="card p-4 shadow form-layout mx-auto">
+    <label for="category-filter" class="form-label"><strong>Filtrar categorías:</strong></label>
+    <input type="text" id="category-filter" class="form-control mb-3"
+           placeholder="🔍 Buscar por nombre..." value="{{ query }}">
+    <div class="text-center mt-3">
+      <a class="btn btn-success btn-lg" href="{% url 'category_create' %}">
+        <i class="fa fa-plus-circle"></i> Crear categoría
+      </a>
+    </div>
+  </div>
+
+  <hr class="my-5">
+
+  <!-- Tabla de categorías -->
+  <div id="category-table-container">
+    <table class="table table-hover table-bordered align-middle shadow-sm w-100">
+      <thead class="table-primary text-center">
+        <tr>
+          <th>Nombre</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for category in categories %}
+          {% if not category.deleted %}
+          <tr class="table-secondary">
+            <td>{{ category.name }}</td>
+            <td class="text-center">
+                <a class="btn btn-outline-success btn-sm" href="{% url 'category_detail' category.pk %}">
+                    <i class="fa fa-eye"></i>
+                </a>
+              <a class="btn btn-outline-info btn-sm" href="{% url 'category_update' category.pk %}">
+                <i class="fa fa-edit"></i>
+              </a>
+              <a class="btn btn-outline-danger btn-sm" href="{% url 'category_delete' category.pk %}">
+                <i class="fa fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% endif %}
+        {% empty %}
+          <tr>
+            <td colspan="2" class="text-center text-muted fw-bold">
+              No hay categorías disponibles.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Paginación -->
+    {% if is_paginated %}
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                &laquo; Anterior
+              </a>
+            </li>
+          {% endif %}
+          {% for num in paginator.page_range %}
+            <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+              <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
+            </li>
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                Siguiente &raquo;
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+  </div>
+
+  <!-- Búsqueda AJAX -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function(){
+      let timer;
+      $('#category-filter').on('input', function(){
+        clearTimeout(timer);
+        const val = $(this).val();
+        timer = setTimeout(function(){
+          const params = new URLSearchParams(window.location.search);
+          if (val) params.set('q', val);
+          else params.delete('q');
+          const url = window.location.pathname + '?' + params.toString();
+          $('#category-table-container').load(url + ' #category-table-container');
+          history.replaceState(null, '', url);
+        }, 300);
+      });
+    });
+  </script>
+{% endblock %}

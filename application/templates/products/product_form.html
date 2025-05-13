@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="container bg-light shadow-md p-5 form-layout">
+    <h1 class="text-primary fw-bold">
+      {% if form.instance.pk %}Actualizar Producto{% else %}Registrar Nuevo Producto{% endif %}
+    </h1>
+    <p class="text-muted">
+      {% if form.instance.pk %}
+        Modifica los detalles del producto y guarda los cambios.
+      {% else %}
+        Ingrese los datos del producto y guarde la información.
+      {% endif %}
+    </p>
+    <hr>
+
+    <form method="post" autocomplete="off">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <br>
+      <button type="submit" class="btn btn-primary">
+        {% if form.instance.pk %}Actualizar{% else %}Crear{% endif %}
+      </button>
+      <a href="{% url 'product_list' %}" class="btn btn-secondary">Regresar</a>
+    </form>
+  </div>
+{% endblock %}

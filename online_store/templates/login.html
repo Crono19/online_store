@@ -37,7 +37,7 @@
     border-radius: 8px;
 }
 
-.login-card .btn-orange {
+.btn-orange {
     background: linear-gradient(to right, #00c6dd, #8e02fb);
     color: white;
     border: none;
@@ -47,13 +47,26 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.login-card .btn-orange:hover {
+.btn-orange:hover {
     opacity: 0.9;
 }
 
+.register-link {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    color: #555;
+    font-size: 0.95rem;
+}
 
-.login-card .btn-orange:hover {
-    background-color: #cf540c;
+.register-link a {
+    color: #8e02fb;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
 }
 </style>
 {% endblock extra_templates %}
@@ -65,7 +78,7 @@
         <form method="POST" autocomplete="off">
             {% csrf_token %}
 
-            <!-- Campo Username -->
+            <!-- Username -->
             <div class="input-group mb-3">
                 <span class="input-group-text">
                     <i class="fa-solid fa-user me-2"></i> Usuario
@@ -73,7 +86,7 @@
                 <input type="text" name="{{ form.username.name }}" class="form-control" required>
             </div>
 
-            <!-- Campo Password -->
+            <!-- Password -->
             <div class="input-group mb-4">
                 <span class="input-group-text">
                     <i class="fa-solid fa-lock me-2"></i> Contraseña
@@ -81,9 +94,15 @@
                 <input type="password" name="{{ form.password.name }}" class="form-control" required>
             </div>
 
+            <!-- Submit -->
             <button type="submit" class="btn btn-orange w-100 p-2">
                 <i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión
             </button>
+
+            <!-- Register link -->
+            <div class="register-link">
+                ¿No tienes una cuenta? <a href="{% url 'register' %}">Regístrate aquí</a>
+            </div>
         </form>
     </div>
 </section>

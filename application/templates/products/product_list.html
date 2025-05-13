@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_templates %}
+<style>
+.strike {
+    color: #aaa;
+    font-size: 0.9rem;
+    text-decoration: line-through;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+  <div class="text-center my-4">
+    <h1 class="display-4 fw-bold text-primary">Gestión de Productos</h1>
+    <p class="lead text-muted">Administra y filtra tus productos eficientemente.</p>
+  </div>
+
+  <!-- Filter and Create -->
+  <div class="card p-4 shadow form-layout mx-auto">
+    <label for="product-filter" class="form-label"><strong>Filtrar productos:</strong></label>
+    <input type="text" id="product-filter" class="form-control mb-3"
+           placeholder="🔍 Buscar por nombre..." value="{{ query }}">
+    <div class="text-center mt-3">
+      <a class="btn btn-success btn-lg" href="{% url 'product_create' %}">
+        <i class="fa fa-plus-circle"></i> Crear producto
+      </a>
+    </div>
+  </div>
+
+  <hr class="my-5">
+
+  <!-- Table Container -->
+  <div id="product-table-container">
+    <table class="table table-hover table-bordered align-middle shadow-sm w-100">
+      <thead class="table-primary text-center">
+        <tr>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %}
+          {% if not product.deleted %}
+          <!-- Product row -->
+          <tr class="table-secondary">
+            <td>{{ product.name }}</td>
+            <td>
+              {% if product.is_sale %}
+                <span class="strike">Q{{ product.price }}</span><br>
+                <strong>Q{{ product.sale_price }}</strong>
+              {% else %}
+                <strong>Q{{ product.price }}</strong>
+              {% endif %}
+            </td>
+            <td>{{ product.stock }}</td>
+            <td class="text-center">
+              <a class="btn btn-outline-success btn-sm" href="{% url 'product_detail' product.pk %}">
+                <i class="fa fa-eye"></i>
+              </a>
+              <a class="btn btn-outline-info btn-sm" href="{% url 'product_update' product.pk %}">
+                <i class="fa fa-edit"></i>
+              </a>
+              <a class="btn btn-outline-danger btn-sm" href="{% url 'product_delete' product.pk %}">
+                <i class="fa fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% endif %}
+        {% empty %}
+          <tr>
+            <td colspan="4" class="text-center text-muted fw-bold">
+              No hay productos disponibles.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                &laquo; Anterior
+              </a>
+            </li>
+          {% endif %}
+          {% for num in paginator.page_range %}
+            <li class="page-item {% if num == page_obj.number %}active{% endif %}">
+              <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">
+                {{ num }}
+              </a>
+            </li>
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                Siguiente &raquo;
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+  </div>
+
+  <!-- AJAX search -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function(){
+      let timer;
+      $('#product-filter').on('input', function(){
+        clearTimeout(timer);
+        const val = $(this).val();
+        timer = setTimeout(function(){
+          const params = new URLSearchParams(window.location.search);
+          if (val) params.set('q', val);
+          else params.delete('q');
+          const url = window.location.pathname + '?' + params.toString();
+          $('#product-table-container').load(url + ' #product-table-container');
+          history.replaceState(null, '', url);
+        }, 300);
+      });
+    });
+  </script>
+{% endblock %}

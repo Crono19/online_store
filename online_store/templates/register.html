@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block extra_templates %}
+<style>
+.register-section {
+    min-height: 95vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, #00c6dd, #02b7f0, #8e02fb);
+}
+
+.register-card {
+    background-color: white;
+    padding: 3rem;
+    border-radius: 16px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.register-card h3 {
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.register-card .btn-gradient {
+    background: linear-gradient(to right, #00c6dd, #8e02fb);
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    transition: opacity 0.3s ease;
+}
+
+.register-card .btn-gradient:hover {
+    opacity: 0.9;
+}
+</style>
+{% endblock extra_templates %}
+
+{% block content %}
+<section class="register-section">
+    <div class="register-card">
+        <h3>Crear una cuenta</h3>
+
+        <form method="POST" autocomplete="off">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            <button type="submit" class="btn btn-gradient w-100 mt-3 p-2">
+                <i class="fa-solid fa-user-plus"></i> Registrarse
+            </button>
+        </form>
+
+        <div class="text-center mt-3">
+            <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}" class="text-primary">Inicia sesión</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}
